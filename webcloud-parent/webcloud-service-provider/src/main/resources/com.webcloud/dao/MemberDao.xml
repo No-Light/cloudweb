@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.webcloud.dao.MemberDao">
+    <select id=""></select>
+
+    <insert id="setMemberAndRole" parameterType="Map">
+        insert into c_member_role(mid,rid)
+        values
+        (#{mid},#{rid})
+    </insert>
+
+    <delete id="deleteAssoication" parameterType="integer">
+        delete from c_member_role where mid= #{_parameter}
+    </delete>
+
+</mapper>

@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/webcloud-parent/webcloud-backend/webcloud-backend.iml" filepath="$PROJECT_DIR$/webcloud-parent/webcloud-backend/webcloud-backend.iml" />
+      <module fileurl="file://$PROJECT_DIR$/webcloud-parent/webcloud-common/webcloud-common.iml" filepath="$PROJECT_DIR$/webcloud-parent/webcloud-common/webcloud-common.iml" />
+      <module fileurl="file://$PROJECT_DIR$/webcloud-parent/webcloud-frontend/webcloud-frontend.iml" filepath="$PROJECT_DIR$/webcloud-parent/webcloud-frontend/webcloud-frontend.iml" />
+      <module fileurl="file://$PROJECT_DIR$/webcloud-parent/webcloud-interface/webcloud-interface.iml" filepath="$PROJECT_DIR$/webcloud-parent/webcloud-interface/webcloud-interface.iml" />
+      <module fileurl="file://$PROJECT_DIR$/webcloud-parent/webcloud-parent.iml" filepath="$PROJECT_DIR$/webcloud-parent/webcloud-parent.iml" />
+      <module fileurl="file://$PROJECT_DIR$/webcloud-parent/webcloud-service-provider/webcloud-service-provider.iml" filepath="$PROJECT_DIR$/webcloud-parent/webcloud-service-provider/webcloud-service-provider.iml" />
+    </modules>
+  </component>
+</project>

@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.webcloud.dao.RoleDao">
+
+    <resultMap id="baseResultMap" type="com.webcloud.pojo.Role">
+        <id column="id" property="id"/>
+        <result column="role" property="role"/>
+        <result column="keyword" property="keyword"/>
+        <result column="description" property="description"/>
+    </resultMap>
+    <resultMap id="findByMid"
+               type="com.webcloud.pojo.Role"
+               extends="baseResultMap">
+        <collection property="permissions"
+                    javaType="ArrayList"
+                    ofType="com.webcloud.pojo.Permission"
+                    column="id"
+                    select="com.webcloud.dao.PermissionDao.findPermissionById">
+        </collection>
+    </resultMap>
+
+    <select id="findByMid" parameterType="integer" resultMap="findByMid">
+        select * from c_role where id = #{_parameter}
+    </select>
+    <select id="findIdByRole" parameterType="string" resultType="integer">
+        select c_role.id from c_role where role = #{_parameter}
+    </select>
+
+</mapper>

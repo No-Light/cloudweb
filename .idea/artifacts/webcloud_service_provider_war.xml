@@ -1,0 +1,16 @@
+<component name="ArtifactManager">
+  <artifact type="war" name="webcloud-service-provider:war">
+    <output-path>$PROJECT_DIR$/webcloud-parent/webcloud-service-provider/target</output-path>
+    <properties id="maven-jee-properties">
+      <options>
+        <exploded>false</exploded>
+        <module>webcloud-service-provider</module>
+        <packaging>war</packaging>
+        <unpackNestedArchives>false</unpackNestedArchives>
+      </options>
+    </properties>
+    <root id="archive" name="webcloud-service-provider-0.0.1-SNAPSHOT.war">
+      <element id="artifact" artifact-name="webcloud-service-provider:war exploded" />
+    </root>
+  </artifact>
+</component>

@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.webcloud.dao.ActivityDao">
+    <insert id="setActivityAndTypes" parameterType="Map">
+        insert into c_activity_type(aid,tid)
+        values
+            (#{aid},#{tid})
+    </insert>
+    <delete id="deleteAssoication" parameterType="integer">
+        delete from c_activity_type where aid = #{_parameter}
+    </delete>
+</mapper>
