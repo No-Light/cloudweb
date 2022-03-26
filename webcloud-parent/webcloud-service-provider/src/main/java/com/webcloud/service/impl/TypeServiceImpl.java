@@ -60,4 +60,10 @@ public class TypeServiceImpl extends ServiceImpl<TypeDao, Type> implements TypeS
         List<Type> result = typeDao.findTypesByResourceId(id);
         return result;
     }
+
+    @Override
+    public List<Type> findAll() {
+        List<Type> types = typeDao.selectList(null);
+        return types;
+    }
 }

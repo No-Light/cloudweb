@@ -17,6 +17,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 
@@ -70,6 +71,12 @@ public class MemberServiceImpl extends ServiceImpl<MemberDao, Member> implements
                 .like("name",queryString).or()
                 .like("username",queryPageBean).or());
         return new PageResult(result.getTotal(),result.getRecords());
+    }
+
+    @Override
+    public List<Member> findAll() {
+        List<Member> members = memberDao.selectList(null);
+        return members;
     }
 
     private void setMemberAndRole(Integer memberId,Integer roleId){

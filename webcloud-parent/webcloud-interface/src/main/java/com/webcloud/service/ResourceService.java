@@ -17,4 +17,5 @@ public interface ResourceService extends IService<Resource> {
 
     public PageResult pageQuery(QueryPageBean queryPageBean);
 
+    public List<Resource> findAll();
 }

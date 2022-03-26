@@ -4,6 +4,7 @@ import com.webcloud.constant.MessageConstant;
 import com.webcloud.entity.PageResult;
 import com.webcloud.entity.QueryPageBean;
 import com.webcloud.entity.Result;
+import com.webcloud.pojo.Activity;
 import com.webcloud.pojo.Member;
 import com.webcloud.service.MemberService;
 import org.apache.dubbo.config.annotation.DubboReference;
@@ -12,6 +13,8 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.util.List;
 
 @RestController
 @RequestMapping(value = "/member")
@@ -38,6 +41,17 @@ public class MemberController {
     public PageResult findPage(@RequestBody QueryPageBean queryPageBean){
         PageResult pageResult = memberService.pageQuery(queryPageBean);
         return pageResult;
+    }
+
+    @RequestMapping("/findAll")
+    @PreAuthorize("hasAuthority('FINDALL_MEMBER')")
+    public Result findAll(){
+        try{
+            List<Member> result = memberService.findAll();
+            return new Result(true,MessageConstant.FIND_MEMBER_SECCESS,result);
+        }catch (Exception e){
+            return new Result(true,MessageConstant.FIND_MEMBER_FAIL);
+        }
     }
 
     @RequestMapping("/delete")

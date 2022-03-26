@@ -8,13 +8,19 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.webcloud.dao.ResourceDao;
 import com.webcloud.entity.PageResult;
 import com.webcloud.entity.QueryPageBean;
+import com.webcloud.pojo.Activity;
 import com.webcloud.pojo.Resource;
 import com.webcloud.service.ResourceService;
 import org.apache.dubbo.config.annotation.DubboService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.transaction.annotation.Transactional;
+import org.thymeleaf.TemplateEngine;
+import org.thymeleaf.context.Context;
 
+import java.io.*;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @DubboService(interfaceClass = ResourceService.class)
@@ -24,11 +30,18 @@ public class ResourceServiceImpl extends ServiceImpl<ResourceDao, Resource> impl
     @Autowired
     public ResourceDao resourceDao;
 
+    @Autowired
+    public TemplateEngine templateEngine;
+
+    @Value("${thymeleaf_pagepath}")
+    public String pagePath;
+
     @Override
     public void add(Resource resource, Integer[] typeIds) {
         resourceDao.insert(resource);
         Integer resourceId = resource.getId();
         this.setResourceAndTypes(resourceId,typeIds);
+        this.generateTemplatePage(resource);
     }
 
     public int findByIdCount(Integer id){
@@ -49,6 +62,30 @@ public class ResourceServiceImpl extends ServiceImpl<ResourceDao, Resource> impl
         Integer resourceId = resource.getId();
         resourceDao.deleteAssoication(resourceId);
         this.setResourceAndTypes(resourceId,typeIds);
+        this.generateTemplatePage(resource);
+    }
+
+    //页面静态化可能并不完善
+    public void generateTemplatePage(Resource resource){
+        Context context = new Context();
+        Map<String,Object> savData = new HashMap<>();
+        savData.put("resource",resource);
+        context.setVariables(savData);
+
+        File file = new File(pagePath+"/resource_detail_"+resource.getId()+".html");
+        Writer out = null;
+        try{
+            out = new FileWriter(file);
+            templateEngine.process("resource_template",context,out);
+        }catch (Exception e){
+            e.printStackTrace();
+        }finally {
+            try {
+                out.close();
+            }catch (IOException e){
+                e.printStackTrace();
+            }
+        }
     }
 
     @Override
@@ -62,6 +99,12 @@ public class ResourceServiceImpl extends ServiceImpl<ResourceDao, Resource> impl
                 .like("resourceMan", queryPageBean).or()
                 .like("url", queryPageBean));
         return new PageResult(result.getTotal(),result.getRecords());
+    }
+
+    @Override
+    public List<Resource> findAll() {
+        List<Resource> resources = resourceDao.selectList(null);
+        return resources;
     }
 
     private void setResourceAndTypes(Integer resourceId,Integer[] typeIds){

@@ -12,6 +12,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.List;
+
 @RestController
 @RequestMapping(value = "/resource")
 public class ResourceController {
@@ -62,5 +64,15 @@ public class ResourceController {
         return pageResult;
     }
 
+    @RequestMapping("/findAll")
+    @PreAuthorize("hasAuthority('FINDALL_RESOURCE')")
+    public Result findAll(){
+        try{
+            List<Resource> result = resourceService.findAll();
+            return new Result(true,MessageConstant.FIND_ACTIVITY_SECCESS,result);
+        }catch (Exception e){
+            return new Result(true,MessageConstant.FIND_ACTIVITY_FAIL);
+        }
+    }
 
 }

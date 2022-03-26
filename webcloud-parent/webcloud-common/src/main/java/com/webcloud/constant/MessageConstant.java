@@ -22,6 +22,14 @@ public class MessageConstant {
     public static final String DELETE_RESOURCE_FAIL = "删除资源失败";
     public static final String EDIT_RESOURCE_SUCCESS = "编辑资源成功";
     public static final String EDIT_RESOURCE_FAIL = "编辑资源失败";
+    public static final String FIND_ACTIVITY_SECCESS = "查找活动成功";
+    public static final String FIND_ACTIVITY_FAIL = "查找活动失败";
+    public static final String FIND_RESOURCE_SECCESS = "查找资源成功";
+    public static final String FIND_RESOURCE_FAIL = "查找资源失败";
+    public static final String FIND_MEMBER_SECCESS = "查找成员成功";
+    public static final String FIND_MEMBER_FAIL = "查找成员失败";
+    public static final String FIND_TYPE_SECCESS = "查找标签成功";
+    public static final String FIND_TYPE_FAIL = "查找标签失败";
 
 
 

@@ -8,6 +8,12 @@ import java.io.Serializable;
 public class QueryPageBean implements Serializable{
     private Integer currentPage;//页码
     private Integer pageSize;//每页记录数
+
+    @Override
+    public String toString() {
+        return currentPage + "#" +pageSize + "#" + queryString;
+    }
+
     private String queryString;//查询条件
 
     public Integer getCurrentPage() {

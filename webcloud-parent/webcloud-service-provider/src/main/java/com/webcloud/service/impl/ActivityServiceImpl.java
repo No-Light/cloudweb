@@ -9,12 +9,18 @@ import com.webcloud.dao.ActivityDao;
 import com.webcloud.entity.PageResult;
 import com.webcloud.entity.QueryPageBean;
 import com.webcloud.pojo.Activity;
+import com.webcloud.pojo.Resource;
 import com.webcloud.service.ActivityService;
 import org.apache.dubbo.config.annotation.DubboService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.transaction.annotation.Transactional;
+import org.thymeleaf.TemplateEngine;
+import org.thymeleaf.context.Context;
 
+import java.io.*;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 
@@ -25,11 +31,18 @@ public class ActivityServiceImpl extends ServiceImpl<ActivityDao, Activity> impl
     @Autowired
     public ActivityDao activityDao;
 
+    @Autowired
+    public TemplateEngine templateEngine;
+
+    @Value("${thymeleaf_pagepath}")
+    public String pagePath;
+
     @Override
     public void add(Activity activity, Integer[] typeIds) {
         activityDao.insert(activity);
         Integer activityId = activity.getId();
         this.setActivityAndTypes(activityId,typeIds);
+        this.generateTemplatePage(activity);
     }
 
     @Override
@@ -38,6 +51,7 @@ public class ActivityServiceImpl extends ServiceImpl<ActivityDao, Activity> impl
         Integer activityId = activity.getId();
         activityDao.deleteAssoication(activityId);
         this.setActivityAndTypes(activityId,typeIds);
+        this.generateTemplatePage(activity);
     }
 
     public int findByIdCount(Integer id){
@@ -52,6 +66,30 @@ public class ActivityServiceImpl extends ServiceImpl<ActivityDao, Activity> impl
         }
     }
 
+    //页面静态化可能并不完善
+    public void generateTemplatePage(Activity activity){
+        Context context = new Context();
+        Map<String,Object> savData = new HashMap<>();
+        savData.put("activity",activity);
+        context.setVariables(savData);
+
+        File file = new File(pagePath+"/activity_detail_"+activity.getId()+".html");
+        Writer out = null;
+        try{
+            out = new FileWriter(file);
+            templateEngine.process("activity_template",context,out);
+        }catch (Exception e){
+            e.printStackTrace();
+        }finally {
+            try {
+                out.close();
+            }catch (IOException e){
+                e.printStackTrace();
+            }
+        }
+    }
+
+
     @Override
     public PageResult pageQuery(QueryPageBean queryPageBean) {
         Integer currentPage = queryPageBean.getCurrentPage();
@@ -63,6 +101,12 @@ public class ActivityServiceImpl extends ServiceImpl<ActivityDao, Activity> impl
                 .like("activityMan", queryPageBean).or()
                 .like("participationConditions", queryPageBean));
         return new PageResult(result.getTotal(),result.getRecords());
+    }
+
+    @Override
+    public List<Activity> findAll() {
+        List<Activity> activities = activityDao.selectList(null);
+        return activities;
     }
 
     private void setActivityAndTypes(Integer activityId,Integer[] typeIds){

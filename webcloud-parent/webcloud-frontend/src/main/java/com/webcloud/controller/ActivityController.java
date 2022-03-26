@@ -1,16 +1,24 @@
 package com.webcloud.controller;
 
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONObject;
 import com.webcloud.constant.MessageConstant;
 import com.webcloud.entity.PageResult;
 import com.webcloud.entity.QueryPageBean;
 import com.webcloud.entity.Result;
 import com.webcloud.pojo.Activity;
+import com.webcloud.pojo.Resource;
 import com.webcloud.service.ActivityService;
 import org.apache.dubbo.config.annotation.DubboReference;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.thymeleaf.TemplateEngine;
+import redis.clients.jedis.JedisPool;
+
+import java.util.List;
 
 @RestController
 @RequestMapping(value = "/activity")
@@ -19,11 +27,8 @@ public class ActivityController {
     @DubboReference
     public ActivityService activityService;
 
-    /**
-     * 活动相较其他的查询应该会更加频繁，所以尝试着将之存入redis就是下一步的目标。
-     * 在Redis中设立缓存，将条件查询得到的数据存入其中
-     * 根据条件的长度动态设立过期时间，避免bigkey长时间存在缓存中影响性能。
-     */
+    @Autowired
+    public JedisPool jedisPool;
 
     @RequestMapping("/add")
     @PreAuthorize("hasAuthority('ADD_ACTIVITY')")
@@ -40,7 +45,22 @@ public class ActivityController {
     @RequestMapping("/findpage")
     @PreAuthorize("hasAuthority('FINDPAGE_ACTIVITY')")
     public PageResult findPage(@RequestBody QueryPageBean queryPageBean){
+        try{
+            if(queryPageBean.getQueryString()!=""&&jedisPool.getResource().get(queryPageBean.toString())!=null){
+                String jsonstr = jedisPool.getResource().get(queryPageBean.toString());
+                List<Activity> activities = JSONObject.parseArray(jsonstr, Activity.class);
+                return new PageResult((long) activities.size(),activities);
+            }
+        }catch (Exception e){
+            e.printStackTrace();
+        }
         PageResult pageResult = activityService.pageQuery(queryPageBean);
+        try {
+            int timeout = 864000/queryPageBean.toString().length();
+            jedisPool.getResource().setex(queryPageBean.toString(),timeout, JSON.toJSONString(pageResult.getRows()));
+        }catch (Exception e){
+            e.printStackTrace();
+        }
         return pageResult;
     }
 

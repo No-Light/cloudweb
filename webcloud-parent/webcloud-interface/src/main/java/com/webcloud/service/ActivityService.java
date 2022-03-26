@@ -13,4 +13,6 @@ public interface ActivityService extends IService<Activity> {
     public void edit(Activity activity,Integer[] typeIds);
     public void delete(Integer id);
     public PageResult pageQuery(QueryPageBean queryPageBean);
+    public List<Activity> findAll();
+
 }

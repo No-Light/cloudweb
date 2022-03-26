@@ -18,4 +18,6 @@ public interface TypeService extends IService<Type> {
     public List<Type> findTypesByActivityId(Integer id);
 
     public List<Type> findTypesByResourceId(Integer id);
+
+    public List<Type> findAll();
 }

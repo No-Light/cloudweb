@@ -1,5 +1,6 @@
 package com.webcloud.controller;
 
+import com.alibaba.druid.proxy.jdbc.JdbcParameter;
 import com.sun.org.apache.regexp.internal.RE;
 import com.webcloud.constant.MessageConstant;
 import com.webcloud.entity.PageResult;
@@ -44,6 +45,17 @@ public class TypeController {
         }catch(Exception e){
             e.printStackTrace();
             return new Result(false,MessageConstant.DELETE_TYPE_FAIL);
+        }
+    }
+
+    @RequestMapping("/findAll")
+    @PreAuthorize("hasAuthority('FINDALL_TYPE')")
+    public Result findAll(){
+        try{
+            List<Type> result = typeService.findAll();
+            return new Result(true,MessageConstant.FIND_ACTIVITY_SECCESS,result);
+        }catch (Exception e){
+            return new Result(true,MessageConstant.FIND_ACTIVITY_FAIL);
         }
     }
 
