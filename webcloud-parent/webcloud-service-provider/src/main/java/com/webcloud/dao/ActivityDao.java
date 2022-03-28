@@ -15,4 +15,8 @@ public interface ActivityDao extends BaseMapper<Activity> {
     public void setActivityAndTypes(Map<String, Integer> map);
 
     public void deleteAssoication(Integer id);
+
+    public void setActivityAndMember(Map<String, Integer> map);
+
+    public void deleteActivityAndTypes(Map<String, Integer> map);
 }

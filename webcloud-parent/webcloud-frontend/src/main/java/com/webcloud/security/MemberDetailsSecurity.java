@@ -32,7 +32,6 @@ public class MemberDetailsSecurity implements UserDetailsService {
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         Member member = memberService.getOne(new QueryWrapper<Member>().eq("username",username));
         if(member == null){throw new UsernameNotFoundException(username + "not found");}
-        if(member.getRole() != "管理员"){throw new UsernameNotFoundException(username + "does not have permission to access");}
 
         List<GrantedAuthority> list = new ArrayList<>();
         Role role = roleService.findByMemberId(member.getId());

@@ -8,6 +8,7 @@ import com.webcloud.dao.MemberDao;
 import com.webcloud.dao.MenuDao;
 import com.webcloud.dao.PermissionDao;
 import com.webcloud.dao.RoleDao;
+import com.webcloud.entity.AccountResult;
 import com.webcloud.entity.PageResult;
 import com.webcloud.entity.QueryPageBean;
 import com.webcloud.pojo.Member;
@@ -16,6 +17,8 @@ import org.apache.dubbo.config.annotation.DubboService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -38,15 +41,16 @@ public class MemberServiceImpl extends ServiceImpl<MemberDao, Member> implements
     public MenuDao menuDao;
 
     @Override
-    public void add(Member member,Integer[] typeIds) {
+    public void add(Member member) {
         String role = member.getRole();
         Integer roleId = role == null ? roleDao.findIdByRole("成员") : roleDao.findIdByRole(role);
+        member.setAdmissionTime(new Date());
         memberDao.insert(member);
         this.setMemberAndRole(member.getId(),roleId);
     }
 
     @Override
-    public void edit(Member member,Integer[] typeIds) {
+    public void edit(Member member) {
         String role = member.getRole();
         Integer roleId = roleDao.findIdByRole(role);
         memberDao.updateById(member);
@@ -77,6 +81,29 @@ public class MemberServiceImpl extends ServiceImpl<MemberDao, Member> implements
     public List<Member> findAll() {
         List<Member> members = memberDao.selectList(null);
         return members;
+    }
+
+    @Override
+    public void editPassword(String username, String oldPassword, String newPassword, String flag) {
+        Member member = memberDao.selectOne(new QueryWrapper<Member>()
+                .eq("username", username)
+                .eq("password", oldPassword)
+                .like("phoneNum", flag).or().like("email", flag));
+        if(member != null){
+            member.setPassword(newPassword);
+            memberDao.updateById(member);
+        }
+    }
+
+    @Override
+    public AccountResult findPassword(String username, String flag) {
+        Member member = memberDao.selectOne(new QueryWrapper<Member>()
+                .eq("username", username)
+                .like("phoneNum", flag).or().like("email", flag));
+        if(member != null){
+            return new AccountResult(member.getUsername(),member.getPassword());
+        }
+        return null;
     }
 
     private void setMemberAndRole(Integer memberId,Integer roleId){

@@ -69,7 +69,7 @@ public class ResourceController {
     public Result findAll(){
         try{
             List<Resource> result = resourceService.findAll();
-            return new Result(true,MessageConstant.FIND_ACTIVITY_SECCESS,result);
+            return new Result(true,MessageConstant.FIND_ACTIVITY_SUCCESS,result);
         }catch (Exception e){
             return new Result(true,MessageConstant.FIND_ACTIVITY_FAIL);
         }

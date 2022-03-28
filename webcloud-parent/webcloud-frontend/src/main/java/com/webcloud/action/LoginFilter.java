@@ -1,14 +1,18 @@
 package com.webcloud.action;
 
 
+import org.springframework.core.annotation.Order;
+import org.springframework.security.access.prepost.PreFilter;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.servlet.*;
+import javax.servlet.annotation.WebFilter;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
 
+@WebFilter
 public class LoginFilter implements Filter {
 
     @Override

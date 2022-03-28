@@ -47,7 +47,7 @@ public class ActivityController {
     public Result findAll(){
         try{
             List<Activity> result = activityService.findAll();
-            return new Result(true,MessageConstant.FIND_ACTIVITY_SECCESS,result);
+            return new Result(true,MessageConstant.FIND_ACTIVITY_SUCCESS,result);
         }catch (Exception e){
             return new Result(true,MessageConstant.FIND_ACTIVITY_FAIL);
         }

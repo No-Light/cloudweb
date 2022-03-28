@@ -10,4 +10,13 @@
     <delete id="deleteAssoication" parameterType="integer">
         delete from c_activity_type where aid = #{_parameter}
     </delete>
+    <insert id="setActivityAndMember" parameterType="Map">
+        insert into c_activity_type(aid,mid)
+        values
+            (#{aid},#{mid})
+    </insert>
+    <insert id="deleteActivityAndTypes" parameterType="Map">
+        delete from c_activity_type where aid = #{aid} and mid = #{mid}
+    </insert>
+
 </mapper>

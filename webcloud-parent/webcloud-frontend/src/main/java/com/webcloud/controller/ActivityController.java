@@ -76,5 +76,24 @@ public class ActivityController {
         }
     }
 
+    @RequestMapping("/signup")
+    public Result signup(@RequestBody JSONObject jsonObject){
+        try{
+            activityService.signup(jsonObject);
+            return new Result(true,MessageConstant.SIGN_ACTIVITY_SUCCESS);
+        }catch (Exception e){
+            return new Result(false,MessageConstant.SIGN_ACTIVITY_FAIL);
+        }
+    }
+
+    @RequestMapping("/cancelregistration")
+    public Result cancelregistration(@RequestBody JSONObject jsonObject){
+        try{
+            activityService.cancelregistration(jsonObject);
+            return new Result(true,MessageConstant.CANCEL_RGISTRATION_SUCCESS);
+        }catch (Exception e){
+            return new Result(false,MessageConstant.CANCEL_RGISTRATION_FAIL);
+        }
+    }
 
 }

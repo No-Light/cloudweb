@@ -53,7 +53,7 @@ public class TypeController {
     public Result findAll(){
         try{
             List<Type> result = typeService.findAll();
-            return new Result(true,MessageConstant.FIND_ACTIVITY_SECCESS,result);
+            return new Result(true,MessageConstant.FIND_ACTIVITY_SUCCESS,result);
         }catch (Exception e){
             return new Result(true,MessageConstant.FIND_ACTIVITY_FAIL);
         }

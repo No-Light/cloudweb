@@ -26,9 +26,9 @@ public class MemberController {
 
     @RequestMapping("/add")
     @PreAuthorize("hasRole('ADMIN')")
-    public Result add(@RequestBody Member member, Integer[] typeIds){
+    public Result add(@RequestBody Member member){
         try{
-            memberService.add(member,typeIds);
+            memberService.add(member);
             return new Result(true, MessageConstant.ADD_MEMBER_SUCCESS);
         }catch (Exception e){
             e.printStackTrace();
@@ -48,7 +48,7 @@ public class MemberController {
     public Result findAll(){
         try{
             List<Member> result = memberService.findAll();
-            return new Result(true,MessageConstant.FIND_MEMBER_SECCESS,result);
+            return new Result(true,MessageConstant.FIND_MEMBER_SUCCESS,result);
         }catch (Exception e){
             return new Result(true,MessageConstant.FIND_MEMBER_FAIL);
         }
@@ -68,9 +68,9 @@ public class MemberController {
 
     @RequestMapping("/edit")
     @PreAuthorize("hasRole('ADMIN')")
-    public Result edit(@RequestBody Member member,Integer[] typeIds){
+    public Result edit(@RequestBody Member member){
         try{
-            memberService.edit(member,typeIds);
+            memberService.edit(member);
             return new Result(true,MessageConstant.EDIT_MEMBER_SUCCESS);
         }catch (Exception e){
             e.printStackTrace();

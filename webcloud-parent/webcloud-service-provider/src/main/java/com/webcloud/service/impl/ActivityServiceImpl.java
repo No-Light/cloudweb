@@ -1,5 +1,6 @@
 package com.webcloud.service.impl;
 
+import com.alibaba.fastjson.JSONObject;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
@@ -89,7 +90,6 @@ public class ActivityServiceImpl extends ServiceImpl<ActivityDao, Activity> impl
         }
     }
 
-
     @Override
     public PageResult pageQuery(QueryPageBean queryPageBean) {
         Integer currentPage = queryPageBean.getCurrentPage();
@@ -109,6 +109,20 @@ public class ActivityServiceImpl extends ServiceImpl<ActivityDao, Activity> impl
         return activities;
     }
 
+    @Override
+    public void signup(JSONObject jsonObject) {
+        Integer memberId = (Integer) jsonObject.get("memberId");
+        Integer activityId = (Integer) jsonObject.get("activityId");
+        this.setActivityAndMember(activityId,memberId);
+    }
+
+    @Override
+    public void cancelregistration(JSONObject jsonObject) {
+        Integer memberId = (Integer) jsonObject.get("memberId");
+        Integer activityId = (Integer) jsonObject.get("activityId");
+        this.deleteActivityAndMember(activityId,memberId);
+    }
+
     private void setActivityAndTypes(Integer activityId,Integer[] typeIds){
         if (typeIds != null && typeIds.length > 0){
             for (Integer typeId : typeIds) {
@@ -118,6 +132,20 @@ public class ActivityServiceImpl extends ServiceImpl<ActivityDao, Activity> impl
                 activityDao.setActivityAndTypes(map);
             }
         }
+    }
+
+    private void setActivityAndMember(Integer activityId, Integer memberId) {
+        Map<String, Integer> map = new HashMap<>();
+        map.put("aid", activityId);
+        map.put("mid", memberId);
+        activityDao.setActivityAndMember(map);
+    }
+
+    private void deleteActivityAndMember(Integer activityId, Integer memberId) {
+        Map<String, Integer> map = new HashMap<>();
+        map.put("aid", activityId);
+        map.put("mid", memberId);
+        activityDao.deleteActivityAndTypes(map);
     }
 
 }
